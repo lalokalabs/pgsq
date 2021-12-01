@@ -101,6 +101,7 @@ def do_task(task):
 
     try:
         module, func = task.func.rsplit('.', 1)
+        importlib.invalidate_caches()
         m = importlib.import_module(module)
         f = getattr(m, func)
     except (ValueError, ImportError, AttributeError) as e:
