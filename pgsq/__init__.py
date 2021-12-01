@@ -6,9 +6,9 @@ import logging
 import datetime
 import importlib
 
+import alog
 import click
 
-from logzero import logger
 from pebble import ProcessPool
 from human_id import generate_id
 from peewee import (
@@ -23,7 +23,13 @@ from peewee import (
 )
 from playhouse.postgres_ext import PostgresqlExtDatabase,  BinaryJSONField
 
-db = PostgresqlExtDatabase('pwq', user='pwq', host="localhost", password="abc123")
+logger = alog
+
+def get_database():
+    db = PostgresqlExtDatabase('pwq', user='pwq', host="localhost", password="abc123")
+    return db
+
+db = get_database()
 
 class BaseModel(Model):
     class Meta:
@@ -119,25 +125,27 @@ def do_task(task):
 
     return result
 
+def do_task_runner(task):
+    db = get_database()
+    with db.bind_ctx([Task, TaskSlot]):
+        return do_task(task)
+
 def task_done(future, task):
-    set_failed = False
+    ret = False
     try:
-        result = future.result()  # blocks until results are ready
+        result, ret = future.result()  # blocks until results are ready
     except TimeoutError as error:
         logger.error(f"task: {task.name} timeout, took longer than {error.args[1]} seconds")
-        set_failed = True
+        ret = False
         result = error
     except Exception as error:
         logger.error(f"task: {task.name} failed error: {error.traceback}")
-        set_failed = True
+        ret = False
         result = error
     else:
         logger.info(f"task: {task.name} done result: {task.result}")
 
-    if not set_failed:
-        return
-
-    status = "failed" if set_failed else "success"
+    status = "success" if ret else "failed"
     affected = update_task(task, current_status="running", status=status, result=result)
     logger.info(f"task: {task.name} updated to {status} affected: {affected}")
 
@@ -147,11 +155,11 @@ def process_task(pool):
             try:
                 task = get_next_task()
             except Exception as e:
-                print("ERROR: ", e)
+                #print("ERROR: ", e)
                 time.sleep(3)
                 continue
             else:
-                res = pool.schedule(do_task, (task,), timeout=20)
+                res = pool.schedule(do_task_runner, (task,), timeout=20)
                 print(task)
                 affected = update_task(task, current_status=task.status, status="running")
                 logger.info(f"Task {task.name} scheduled {affected}")
@@ -172,7 +180,7 @@ def initdb():
 @cli.command()
 @click.option("--num", default=1, help="Number of workers")
 def workers(num=1):
-    with ProcessPool(max_workers=num, max_tasks=500) as pool:
+    with ProcessPool(max_workers=num, max_tasks=10) as pool:
         try:
             print("Running")
             process_task(pool)
@@ -188,8 +196,3 @@ def workers(num=1):
 def run():
     cli()
 
-def do_something(arg1):
-    import random
-    time.sleep(random.choice([1, 2, 3]))
-    print(arg1)
-    return "OK"

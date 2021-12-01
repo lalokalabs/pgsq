@@ -11,10 +11,10 @@ peewee = "^3.14.8"
 psycopg2 = "^2.9.2"
 human-id = "^0.1.0"
 Pebble = "^4.6.3"
-logzero = "^1.7.0"
+alog = "^1.2.0"
 
 [tool.poetry.scripts]
-pwq = 'pgsq:run'
+pgsq = 'pgsq:run'
 
 [tool.poetry.dev-dependencies]
 
