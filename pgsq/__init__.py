@@ -144,7 +144,7 @@ def task_done(future, task):
         ret = False
         result = error
     else:
-        logger.info(f"task: {task.name} done result: {task.result}")
+        logger.info(f"task: {task.name} done result: {result}")
 
     status = "success" if ret else "failed"
     affected = update_task(task, current_status="running", status=status, result=result)
