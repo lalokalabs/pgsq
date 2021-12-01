@@ -1,0 +1,104 @@
+[[package]]
+name = "click"
+version = "7.1.2"
+description = "Composable command line interface toolkit"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "colorama"
+version = "0.4.4"
+description = "Cross-platform colored terminal text."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "human-id"
+version = "0.1.0.post3"
+description = "Human readable IDs, in Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+click = ">=7.1.2,<8.0.0"
+
+[[package]]
+name = "logzero"
+version = "1.7.0"
+description = "Robust and effective logging for Python 2 and 3"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+colorama = {version = "*", markers = "sys_platform == \"win32\""}
+
+[[package]]
+name = "pebble"
+version = "4.6.3"
+description = "Threading and multiprocessing eye-candy."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "peewee"
+version = "3.14.8"
+description = "a little orm"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "psycopg2"
+version = "2.9.2"
+description = "psycopg2 - Python-PostgreSQL Database Adapter"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.8"
+content-hash = "941ed5bd350ba1b33774cf5b40a00d7194e72be6b0d7b1e080c0172fb7ccb298"
+
+[metadata.files]
+click = [
+    {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
+    {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
+]
+colorama = [
+    {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
+    {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
+]
+human-id = [
+    {file = "human_id-0.1.0.post3-py3-none-any.whl", hash = "sha256:f83a6db0c47b6a4fb3b64a7b4d13cec4cc97f8362527a24269803055781fb918"},
+    {file = "human_id-0.1.0.post3.tar.gz", hash = "sha256:6444a83cd92f81b75973708a21e9b71e9f719e4f2d2cbdf07cc97ee879fa51ff"},
+]
+logzero = [
+    {file = "logzero-1.7.0-py2.py3-none-any.whl", hash = "sha256:23eb1f717a2736f9ab91ca0d43160fd2c996ad49ae6bad34652d47aba908769d"},
+    {file = "logzero-1.7.0.tar.gz", hash = "sha256:7f73ddd3ae393457236f081ffebd044a3aa2e423a47ae6ddb5179ab90d0ad082"},
+]
+pebble = [
+    {file = "Pebble-4.6.3-py2.py3-none-any.whl", hash = "sha256:46e02767b239a29b8150466514fabb5c6632bea8c9b7456dfdb715f4636fc8a3"},
+    {file = "Pebble-4.6.3.tar.gz", hash = "sha256:694e1105db888f3576b8f00662f90b057cf3780e6f8b7f57955a568008d0f497"},
+]
+peewee = [
+    {file = "peewee-3.14.8.tar.gz", hash = "sha256:01bd7f734defb08d7a3346a0c0ca7011bc8d0d685934ec0e001b3371d522ec53"},
+]
+psycopg2 = [
+    {file = "psycopg2-2.9.2-cp310-cp310-win32.whl", hash = "sha256:6796ac614412ce374587147150e56d03b7845c9e031b88aacdcadc880e81bb38"},
+    {file = "psycopg2-2.9.2-cp310-cp310-win_amd64.whl", hash = "sha256:dfc32db6ce9ecc35a131320888b547199f79822b028934bb5b332f4169393e15"},
+    {file = "psycopg2-2.9.2-cp36-cp36m-win32.whl", hash = "sha256:77d09a79f9739b97099d2952bbbf18eaa4eaf825362387acbb9552ec1b3fa228"},
+    {file = "psycopg2-2.9.2-cp36-cp36m-win_amd64.whl", hash = "sha256:f65cba7924363e0d2f416041b48ff69d559548f2cb168ff972c54e09e1e64db8"},
+    {file = "psycopg2-2.9.2-cp37-cp37m-win32.whl", hash = "sha256:b8816c6410fa08d2a022e4e38d128bae97c1855e176a00493d6ec62ccd606d57"},
+    {file = "psycopg2-2.9.2-cp37-cp37m-win_amd64.whl", hash = "sha256:26322c3f114de1f60c1b0febf8fdd595c221b4f624524178f515d07350a71bd1"},
+    {file = "psycopg2-2.9.2-cp38-cp38-win32.whl", hash = "sha256:77b9105ef37bc005b8ffbcb1ed6d8685bb0e8ce84773738aa56421a007ec5a7a"},
+    {file = "psycopg2-2.9.2-cp38-cp38-win_amd64.whl", hash = "sha256:91c7fd0fe9e6c118e8ff5b665bc3445781d3615fa78e131d0b4f8c85e8ca9ec8"},
+    {file = "psycopg2-2.9.2-cp39-cp39-win32.whl", hash = "sha256:a761b60da0ecaf6a9866985bcde26327883ac3cdb90535ab68b8d784f02b05ef"},
+    {file = "psycopg2-2.9.2-cp39-cp39-win_amd64.whl", hash = "sha256:fd7ddab7d6afee4e21c03c648c8b667b197104713e57ec404d5b74097af21e31"},
+    {file = "psycopg2-2.9.2.tar.gz", hash = "sha256:a84da9fa891848e0270e8e04dcca073bc9046441eeb47069f5c0e36783debbea"},
+]
