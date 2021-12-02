@@ -6,8 +6,8 @@ import logging
 import datetime
 import importlib
 
-import alog
 import click
+import logzero
 
 from pebble import ProcessPool
 from human_id import generate_id
@@ -23,7 +23,11 @@ from peewee import (
 )
 from playhouse.postgres_ext import PostgresqlExtDatabase,  BinaryJSONField
 
-logger = alog
+log_format = '%(color)s[%(levelname)1.1s %(asctime)s pgsq:%(funcName)s:%(lineno)d]%(end_color)s %(message)s'
+formatter = logzero.LogFormatter(fmt=log_format)
+logzero.setup_default_logger(formatter=formatter)
+logger = logzero.logger
+logzero.logfile("logs.txt")
 
 def get_database():
     db = PostgresqlExtDatabase('pwq', user='pwq', host="localhost", password="abc123")
@@ -163,7 +167,7 @@ def process_task(pool):
                 res = pool.schedule(do_task_runner, (task,), timeout=20)
                 print(task)
                 affected = update_task(task, current_status=task.status, status="running")
-                logger.info(f"Task {task.name} scheduled {affected}")
+                logger.info(f"Task {task.name} username: {task.username} scheduled {affected}")
                 def _task_done_wrapper(future, task=task):
                     task_done(future, task)
                 res.add_done_callback(_task_done_wrapper)
