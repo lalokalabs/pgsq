@@ -2,7 +2,7 @@
         WITH running_jobs_per_queue AS (
           SELECT
             username,
-            count(1) AS running_jobs from jobs
+            count(1) AS running_jobs from task
           WHERE (status = 'running' OR status = 'queued') -- running or queued
           AND created_at > NOW() - INTERVAL '6 HOURS' -- ignore jobs running past 6 hours ago
           group by 1
