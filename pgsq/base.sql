@@ -12,17 +12,54 @@
           select
             R.username
           from running_jobs_per_queue R
-          left join user_queues Q ON R.username = Q.username
-          where R.running_jobs >= CASE WHEN Q.num_slots IS NOT NULL THEN Q.num_slots ELSE 3 END
+          left join taskslot Q ON R.username = Q.username
+          where R.running_jobs >= CASE WHEN Q.slots IS NOT NULL THEN Q.slots ELSE 3 END
         )
         select *
         from jobs
         where status IN ('created', 'failed')
           and username NOT IN ( select username from full_queues )
-        '''
-        sql_dedicated = 'and username = %s'
-        sql_end = '''
           and retry_time <= now()
         order by id asc
         for update skip locked
         limit 1;
+
+
+-- stats
+
+SELECT username,
+    sum(case when status = 'created' then 1 else 0 end) as created,
+    sum(case when status = 'running' then 1 else 0 en d) as running,
+    sum(case when status = 'success' then 1 else 0 end) as success,
+    sum(case when status = 'failed' then 1 else 0 end) as failed,
+    count(*) as total,
+    max(age(start_time, created_at)) as max_delay
+    from task
+    where created_at > now() - interval '1 day'
+    group by username;
+
+-- trend per day
+
+SELECT created_at::date, count(1) as count, rpad('#', cast(count(1) / 100 as int), '#')
+    FROM task
+WHERE created_at > now() - interval '1 day'
+GROUP BY created_at::date
+ORDER BY 1 desc;
+
+
+-- trend per hour
+
+CREATE FUNCTION convert_tz(
+        thetime timestamp without time zone,
+        from_tz character varying,
+        to_tz character varying
+    ) RETURNS timestamp without time zone as $$
+    BEGIN RETURN thetime at time zone from_tz at time zone to_tz ; END
+$$ language plpgsql;
+
+SELECT date_trunc('hour', convert_tz(created_at, 'UTC', 'Asia/Kuala_Lumpur')),
+    count(1),
+    rpad('#', cast(count(1) / 10 as int), '#')
+FROM task
+WHERE created_at  >= now() - interval '1 day'
+GROUP BY 1;
