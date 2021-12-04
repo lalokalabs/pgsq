@@ -207,6 +207,13 @@ def workers(num=1):
             time.sleep(5)
             sys.exit(1)
 
+@cli.command()
+@click.argument("username")
+@click.argument("count", type=int)
+def produce_tasks(username, count):
+    for i in range(count):
+        task = add_task(username, 'pgsq.test_task.do_something', "aaa", status="created")
+
 def run():
     cli()
 
