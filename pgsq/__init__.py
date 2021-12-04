@@ -98,7 +98,14 @@ def get_next_task():
 
 def update_task(task, current_status, **kwargs):
     Task = type(task)
-    query = Task.update(**kwargs).where(Task.id==task.id, current_status==current_status)
+    status = kwargs["status"]
+    retry_time = task.retry_time
+    if status == "failed":
+        one_sec = datetime.timedelta(seconds=1)
+        retry_time = task.retry_time + ((task.retry_time - task.created_at + one_sec) * 2)
+        logger.info(f"{task.name} failed, current_status: {current_status} created_at: {task.created_at} delayed to {retry_time}")
+
+    query = Task.update(retry_time=retry_time, **kwargs).where(Task.id==task.id, current_status==current_status)
     return query.execute()
 
 def do_task(task):
