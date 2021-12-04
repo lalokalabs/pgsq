@@ -13,6 +13,7 @@ from pebble import ProcessPool
 from human_id import generate_id
 from peewee import (
     fn,
+    SQL,
     JOIN,
     Case,
     Model,
@@ -70,10 +71,11 @@ def add_task(username, func, *args, **kwargs):
     return task
 
 def get_next_task():
+    six_hours = SQL("INTERVAL '6 hours'")
     running_jobs_per_queue = (Task
             .select(Task.username, fn.Count(1).alias("running_jobs"))
             .where(Task.status.in_(["running", "queued"]))
-            .where(Task.created_at > datetime.datetime.now() - datetime.timedelta(hours=6))
+            .where(Task.created_at > fn.Now() - six_hours)
             .group_by(Task.username)
             .cte('running_jobs_per_queue', columns=("username", "running_jobs")))
 
