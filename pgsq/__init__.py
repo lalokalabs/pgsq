@@ -82,7 +82,7 @@ def get_next_task():
     full_queues = (running_jobs_per_queue
             .select_from([running_jobs_per_queue.c.username])
             .join(TaskSlot, JOIN.LEFT_OUTER, on=(running_jobs_per_queue.c.username == TaskSlot.username))
-            .where(running_jobs_per_queue.c.running_jobs >= Case(None, [((TaskSlot.slots != None), TaskSlot.slots)], 6))
+            .where(running_jobs_per_queue.c.running_jobs >= Case(None, [((TaskSlot.slots != None), TaskSlot.slots)], 3))
             .cte("full_queues", columns=("username",)))
 
     query = (Task
