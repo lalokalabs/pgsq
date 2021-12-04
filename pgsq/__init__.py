@@ -196,14 +196,14 @@ def initdb():
 def workers(num=1):
     with ProcessPool(max_workers=num, max_tasks=10) as pool:
         try:
-            print("Running")
+            logger.info("Running")
             process_task(pool)
         except KeyboardInterrupt:
-            print("Exiting ...")
+            logger.info("Exiting ...")
             pool.close()
             pool.join()
         except Exception as e:
-            print("ERROR:", e)
+            logger.error("ERROR:", e)
             time.sleep(5)
             sys.exit(1)
 
