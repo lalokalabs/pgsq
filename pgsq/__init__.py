@@ -98,7 +98,7 @@ def get_next_task():
 
 def update_task(task, current_status, **kwargs):
     Task = type(task)
-    status = kwargs["status"]
+    status = kwargs.get("status", "")
     retry_time = task.retry_time
     if status == "failed":
         one_sec = datetime.timedelta(seconds=1)
@@ -142,6 +142,8 @@ def do_task(task):
 def do_task_runner(task):
     db = get_database()
     with db.bind_ctx([Task, TaskSlot]):
+        affected = update_task(task, current_status="running", start_time=fn.Now())
+        logger.info(f"Start running task {task.name} username: {task.username} affected: {affected}")
         return do_task(task)
 
 def task_done(future, task):
