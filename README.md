@@ -1,5 +1,5 @@
 
-Task queue using Python and PostgreSQL.
+Multi-tenant task queue using Python and PostgreSQL. It try to solve the ["noisy neighbor problem"](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/noisy-neighbor.html).
 
 Original implementation:-
 
